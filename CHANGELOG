@@ -1,0 +1,39 @@
+# Changelog
+
+All notable changes to NoBlizzRangeFade will be documented in this file.
+
+## [1.0.0] - 2025-02-02
+
+### Added
+- Initial stable release
+- Prevents raid and party frames from fading when units are out of range
+- Works with Midnight (12.0.0) client
+- Continuous monitoring system (checks 10 times per second)
+- `/norangefade status` command to check version
+- `/norangefade debug` command to toggle debug logging
+
+### Technical Details
+- Uses OnUpdate loop (0.1s interval) to disable range display and force alpha
+- Avoids all hooks and wrappers to prevent Blizzard's protected code errors
+- No lua errors, no taint, stable operation
+- Supports both party frames (CompactPartyFrameMember1-5) and raid frames (RaidGroupButton1-40)
+
+### Known Issues
+- Minor visual flicker may occur when units move in/out of range (unavoidable without causing lua errors)
+- Only works with default Blizzard raid/party frames (not compatible with custom frame addons like ElvUI)
+
+## [0.3.7] - 2025-02-02
+
+### Development Versions
+- Multiple diagnostic and testing versions
+- Explored various approaches including hooks, wrappers, and polling
+- Discovered that any modification to frame properties triggers Blizzard's protection system
+- Final solution: continuous monitoring without hooks
+
+---
+
+## Version Numbering
+
+- **Major (1.x.x)**: Breaking changes or complete rewrites
+- **Minor (x.1.x)**: New features, significant improvements
+- **Patch (x.x.1)**: Bug fixes, minor tweaks
