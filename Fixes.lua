@@ -94,5 +94,5 @@ ns.FixAllFrames = DisableRangeDisplay
 
 ns.SetupHooks = function()
     DisableRangeDisplay()
-    print("|cff00ff00[NoBlizzRangeFade]|r Active - frames will not fade when out of range")
+    print("|cff00ff00[NoBlizzRangeFade]|r V1.0 Active - frames will not fade when out of range")
 end
