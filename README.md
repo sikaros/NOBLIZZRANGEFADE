@@ -18,7 +18,7 @@ Made with healers, raid leaders, and UI enjoyers in mind — because readable fr
 
 ✅ Safe to use in combat
 
-✅ Built only for Midnight (v12.0)
+✅ Built only for Midnight 12.0 and beyond
 
 No taint. No errors. No broken abilities.
 
