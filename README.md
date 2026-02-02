@@ -127,7 +127,8 @@ Done — no setup required 🎉
 
 🙏 Credits & Inspiration
 
-💜 anniefuchsia — for highlighting the issue and inspiring a solution
+💜 anniefuchsia — for highlighting the issue and inspiring a solution. 
+View the Clip:  https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
 
 🤖 Claude — powered-by-vibes coding assistance
 
