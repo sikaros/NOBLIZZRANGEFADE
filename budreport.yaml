@@ -1,0 +1,39 @@
+name: 🐛 Bug Report
+description: Report a bug or unintended behavior
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🛑 STOP! 
+        Before reporting, please ensure you have read the **Known Issues** section in the [README](https://github.com/YOUR_USERNAME/NoBlizzRangeFade#technical-limitations--the-flicker).
+        
+        **Note:** Due to Blizzard's *Midnight* engine, a slight flicker when players move in/out of range is **unavoidable**. Reports about the flicker will be closed.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Prerequisite Check
+      options:
+        - label: I have read the README and confirmed this isn't a known engine limitation.
+          required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe the bug clearly.
+      placeholder: "e.g., The frames disappear entirely when I enter a Raid."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      description: Be specific. "I want it to be perfect" is not actionable!
+      placeholder: "e.g., I expected the frame alpha to stay at 1.0, but it dropped to 0.5."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Addon Version
+      placeholder: "v0.3.1"
