@@ -1,51 +1,54 @@
 🌙 NoBlizzRangeFade (Midnight)
 
-NoBlizzRangeFade is a lightweight World of Warcraft addon made specifically for the Midnight client.
-Its job is simple:
+Author: Sikaros
+Powered by: Claude (vibe coding ✨)
+
+NoBlizzRangeFade is a lightweight World of Warcraft addon built specifically for the Midnight client.
+Its mission is simple:
 
 👉 Stop Party & Raid frames from fading when players are out of range.
 
-Perfect for healers, raid leaders, and anyone who wants clean, consistent unit frames at all times.
+Made with healers, raid leaders, and UI enjoyers in mind — because readable frames matter.
 
 ✨ What This Addon Does
 
-✅ Keeps Raid and Party frames fully visible
+✅ Keeps Party & Raid frames fully visible
 
-✅ Prevents Blizzard’s automatic range-based transparency
+✅ Prevents Blizzard’s new range-based transparency
 
-✅ Works safely in combat
+✅ Safe to use in combat
 
-✅ Designed only for Midnight (v12.0) — no legacy hacks
+✅ Built only for Midnight (v12.0)
 
-No weird taint. No blocked abilities. No surprise UI breakage.
+No taint. No errors. No broken abilities.
 
-❓ Why This Exists
+💡 Why This Exists
 
-In the Midnight expansion (v12.0), Blizzard moved large parts of unit frame logic into protected C-side code.
+During the Midnight pre-patch (v12.0), Blizzard introduced a new transparency effect on Party and Raid frames when units move out of range.
 
-That means:
+This change:
 
-Old addons that disabled range fading now cause:
+Is handled in protected C-side code
 
-❌ “Secret Value” errors
+Breaks traditional methods used by older addons
 
-❌ UI taint
+Causes “Secret Value” errors, taint, and combat issues if handled incorrectly
 
-❌ Abilities becoming unusable in combat
+This problem was highlighted publicly by streamer anniefuchsia, who couldn’t find a safe way to fully disable the new transparency behavior.
 
-NoBlizzRangeFade avoids all of that.
+So… this addon was born.
 
 🛡️ How It Works — “The Defender” Logic
 
-Instead of fighting Blizzard’s protected systems, this addon plays smart defense.
+Instead of fighting Blizzard’s protected systems, NoBlizzRangeFade takes a defensive approach.
 
 🔁 Reactive Restoration
 
 Every 0.05–0.1 seconds, the addon:
 
-Scans active Party & Raid frames
+Scans visible Party & Raid frames
 
-Forces them back to full visibility (SetAlpha(1))
+Forces them back to full opacity (SetAlpha(1))
 
 🧠 Stability First
 
@@ -59,43 +62,55 @@ Forces them back to full visibility (SetAlpha(1))
 
 🎯 Midnight-Aware
 
-Targets:
+Specifically targets:
 
 RaidGroupButton
 
 CompactPartyFrameMember
 
-Built specifically for modern Midnight frame structures
+These are unique to the modern Midnight client
 
 ⚠️ Known Limitation: The Tiny Flicker™
 
-You might notice a very brief flicker when a unit moves in or out of range.
+You may notice a very brief flicker when a unit moves in or out of range.
 
 Why it happens
 
 Blizzard fades the frame instantly
 
-Lua reacts milliseconds later
+Lua restores visibility milliseconds later
 
 There’s a tiny visual gap between the two
 
-Why it’s NOT “fixed”
+Why it’s not “fixed”
 
-Trying to intercept or override Blizzard’s fade logic:
+Trying to intercept Blizzard’s fade logic:
 
-Triggers Secret Value corruption
+Turns frame data into “Secret Values”
 
-Causes catastrophic UI errors
+Causes severe UI errors
 
-Breaks combat actions
+Can block abilities in combat
 
 The Tradeoff
 
-🟢 Stable, error-free UI
-🔴 vs.
-🔵 Perfectly static frames
+🟢 Stable, safe UI
+🔵 over
+🔴 Perfectly static frames
 
-This addon chooses stability every time.
+Stability wins every time.
+
+🧪 A Small Personal Note
+
+👋 Hi! I’m Sikaros, and I’m a new addon author.
+
+This is a learning project
+
+I’m still figuring things out as I go
+
+Please be patient — and kind ❤️
+
+Feedback, bug reports, and suggestions are always welcome, just keep in mind that this addon is built carefully and conservatively to avoid breaking the UI.
 
 📦 Installation
 
@@ -110,12 +125,10 @@ Restart World of Warcraft
 
 Done — no setup required 🎉
 
-🧘 Final Notes
+🙏 Credits & Inspiration
 
-This addon is intentionally minimal
+💜 anniefuchsia — for highlighting the issue and inspiring a solution
 
-No config, no slash commands, no fluff
+🤖 Claude — powered-by-vibes coding assistance
 
-It just does one thing — and does it safely
-
-If you value reliability over risky hacks, this addon is for you.
+🧠 Blizzard — for… making this necessary 😄
