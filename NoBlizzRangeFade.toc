@@ -1,7 +1,7 @@
 ## Interface: 120000
 ## Title: NoBlizzRangeFade
-## Author: YourName
-## Version: 0..3.7
+## Author: Sikaros
+## Version: 1.0
 ## Notes: DIAGNOSTIC MODE - Hooks all possible fade functions to find what Midnight uses. Watch debug logs.
 ## OptionalDeps: 
 ## SavedVariables: NoBlizzRangeFadeDB
