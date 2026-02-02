@@ -1,13 +1,13 @@
 ## Interface: 120000
 ## Title: NoBlizzRangeFade
+## Notes: Prevents raid and party frames from fading when units are out of range
 ## Author: Sikaros
-## Version: 1.0
-## Notes: DIAGNOSTIC MODE - Hooks all possible fade functions to find what Midnight uses. Watch debug logs.
-## OptionalDeps: 
+## Version: 1.0.0
 ## SavedVariables: NoBlizzRangeFadeDB
+## X-Category: Unit Frames
+## X-Website: https://github.com/Sikaros/NoBlizzRangeFade
+## X-Curse-Project-ID: 
+## X-WoWI-ID: 
 
-# --- Core must always load first ---
 Core.lua
-
-# --- Hooks and fixes ---
 Fixes.lua
