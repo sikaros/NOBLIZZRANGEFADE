@@ -1,0 +1,13 @@
+## Interface: 120000
+## Title: NoBlizzRangeFade
+## Author: YourName
+## Version: 0..3.7
+## Notes: DIAGNOSTIC MODE - Hooks all possible fade functions to find what Midnight uses. Watch debug logs.
+## OptionalDeps: 
+## SavedVariables: NoBlizzRangeFadeDB
+
+# --- Core must always load first ---
+Core.lua
+
+# --- Hooks and fixes ---
+Fixes.lua
