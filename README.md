@@ -1,135 +1,110 @@
-🌙 NoBlizzRangeFade (Midnight)
+# 🌙 NoBlizzRangeFade (Midnight)
 
-Author: Sikaros
-Powered by: Claude (vibe coding ✨)
+**Author:** *Sikaros*  
+**Powered by:** Claude (vibe coding ✨)
 
-NoBlizzRangeFade is a lightweight World of Warcraft addon built specifically for the Midnight client.
+NoBlizzRangeFade is a lightweight World of Warcraft addon built **specifically for the Midnight client**.
+
 Its mission is simple:
 
-👉 Stop Party & Raid frames from fading when players are out of range.
+👉 **Stop Party & Raid frames from fading when players are out of range.**
 
-Made with healers, raid leaders, and UI enjoyers in mind — because readable frames matter.
+Designed for healers, raid leaders, and anyone who wants clean, readable unit frames at all times.
 
-✨ What This Addon Does
+---
 
-✅ Keeps Party & Raid frames fully visible
+## ✨ What This Addon Does
 
-✅ Prevents Blizzard’s new range-based transparency
+- Keeps **Party & Raid frames fully visible**
+- Prevents Blizzard’s **range-based transparency**
+- Safe to use **in combat**
+- Built exclusively for **Midnight and beyond**
 
-✅ Safe to use in combat
+No taint. No errors. No blocked abilities.
 
-✅ Built only for Midnight 12.0 and beyond
+---
 
-No taint. No errors. No broken abilities.
+## 💡 Why This Exists
 
-💡 Why This Exists
-
-During the Midnight pre-patch (v12.0), Blizzard introduced a new transparency effect on Party and Raid frames when units move out of range.
+During the **Midnight pre-patch (v12.0)**, Blizzard introduced a transparency effect on Party and Raid frames when units move out of range.
 
 This change:
+- Is handled in protected **C-side code**
+- Breaks traditional addon methods
+- Can cause **Secret Value errors**, taint, and combat issues
 
-Is handled in protected C-side code
+This issue was publicly highlighted by **streamer anniefuchsia**, who couldn’t find a safe way to fully disable the new transparency behavior.
 
-Breaks traditional methods used by older addons
+That frustration inspired this addon.
 
-Causes “Secret Value” errors, taint, and combat issues if handled incorrectly
+---
 
-This problem was highlighted publicly by streamer anniefuchsia, who couldn’t find a safe way to fully disable the new transparency behavior.
-
-So… this addon was born.
-
-🛡️ How It Works — “The Defender” Logic
+## 🛡️ How It Works — “The Defender” Logic
 
 Instead of fighting Blizzard’s protected systems, NoBlizzRangeFade takes a defensive approach.
 
-🔁 Reactive Restoration
+### 🔁 Reactive Restoration
 
-Every 0.05–0.1 seconds, the addon:
+- Every **0.05–0.1 seconds**, the addon:
+  - Scans visible Party & Raid frames
+  - Forces them back to full opacity using `SetAlpha(1)`
 
-Scans visible Party & Raid frames
+### 🧠 Stability First
 
-Forces them back to full opacity (SetAlpha(1))
+- No hooks into protected Blizzard functions
+- No overrides of `UpdateInRange`
+- Zero Lua errors
+- Fully combat-safe
 
-🧠 Stability First
-
-🚫 No direct hooks into protected Blizzard functions
-
-🚫 No overrides of UpdateInRange
-
-✅ Zero Lua errors
-
-✅ Fully combat-safe
-
-🎯 Midnight-Aware
+### 🎯 Midnight-Aware
 
 Specifically targets:
+- `RaidGroupButton`
+- `CompactPartyFrameMember`
 
-RaidGroupButton
+These structures are unique to the modern Midnight client.
 
-CompactPartyFrameMember
+---
 
-These are unique to the modern Midnight client
+## ⚠️ Known Limitation: The Tiny Flicker™
 
-⚠️ Known Limitation: The Tiny Flicker™
+You may notice a **very brief flicker** when a unit moves in or out of range.
 
-You may notice a very brief flicker when a unit moves in or out of range.
+### Why it happens
 
-Why it happens
+- Blizzard fades the frame instantly
+- Lua restores visibility milliseconds later
+- A tiny visual gap occurs between the two
 
-Blizzard fades the frame instantly
+### Why it’s not “fixed”
 
-Lua restores visibility milliseconds later
+Intercepting Blizzard’s fade logic:
+- Turns frame data into **Secret Values**
+- Causes severe UI errors
+- Can block abilities in combat
 
-There’s a tiny visual gap between the two
+### The Tradeoff
 
-Why it’s not “fixed”
+- 🟢 Stable, safe UI  
+- 🔵 over perfectly static frames
 
-Trying to intercept Blizzard’s fade logic:
+Stability always wins.
 
-Turns frame data into “Secret Values”
+---
 
-Causes severe UI errors
+## 🧪 A Small Personal Note
 
-Can block abilities in combat
+Hi! I’m **Sikaros**, a **new addon author**.
 
-The Tradeoff
+- This is a learning project
+- I’m still figuring things out
+- Please be patient — and kind ❤️
 
-🟢 Stable, safe UI
-🔵 over
-🔴 Perfectly static frames
-
-Stability wins every time.
-
-🧪 A Small Personal Note
-
-👋 Hi! I’m Sikaros, and I’m a new addon author.
-
-This is a learning project
-
-I’m still figuring things out as I go
-
-Please be patient — and kind ❤️
-
-Feedback, bug reports, and suggestions are always welcome, just keep in mind that this addon is built carefully and conservatively to avoid breaking the UI.
-
-📦 Installation
-
-Download the latest release
-
-Extract the NoBlizzRangeFade folder into:
-
-World of Warcraft/_retail_/Interface/AddOns/
+Feedback, bug reports, and suggestions are welcome, just keep in mind that this addon prioritizes stability above all else.
 
 
-Restart World of Warcraft
+## 🙏 Credits & Inspiration
 
-Done — no setup required 🎉
-
-🙏 Credits & Inspiration
-
-💜 anniefuchsia — for highlighting the issue and inspiring a solution. 
-View the Clip:  https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
-
-🤖 Claude — powered-by-vibes coding assistance
-
-🧠 Blizzard — for… making this necessary 😄
+- **anniefuchsia** — for highlighting the issue and inspiring a solution CLIP: https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
+- **Claude** — powered-by-vibes coding assistance
+- Blizzard — for making this necessary 😄
