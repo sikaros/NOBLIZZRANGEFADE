@@ -2,7 +2,7 @@
 ## Title: NoBlizzRangeFade
 ## Notes: Prevents raid and party frames from fading when units are out of range
 ## Author: Sikaros
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariables: NoBlizzRangeFadeDB
 ## X-Category: Unit Frames
 ## X-Website: https://github.com/Sikaros/NoBlizzRangeFade
