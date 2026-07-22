@@ -1,8 +1,72 @@
 -- NoBlizzRangeFade | Fixes.lua  
--- VERSION: 1.0.0 STABLE
+-- VERSION: 1.1.0
 -- Prevents raid and party frames from fading when units are out of range
 
 local addonName, ns = ...
+
+local overlayByFrame = setmetatable({}, { __mode = "k" })
+
+local function UnitIsOutOfRange(unit)
+    if not unit then
+        return false
+    end
+
+    local ok, inRange, checkedRange = pcall(UnitInRange, unit)
+    if not ok then
+        return false
+    end
+
+    if issecretvalue and (issecretvalue(inRange) or issecretvalue(checkedRange)) then
+        return false
+    end
+
+    local compareOk, isOutOfRange = pcall(function()
+        return checkedRange == true and inRange == false
+    end)
+
+    return compareOk and isOutOfRange
+end
+
+local function GetRangeOverlay(frame)
+    local overlay = overlayByFrame[frame]
+    if overlay then
+        return overlay
+    end
+
+    if InCombatLockdown and InCombatLockdown() then
+        return nil
+    end
+
+    local ok, createdOverlay = pcall(function()
+        local tex = frame:CreateTexture(nil, "OVERLAY", nil, 7)
+        tex:SetAllPoints(frame)
+        tex:SetColorTexture(0.12, 0.12, 0.12, 0.45)
+        tex:Hide()
+        return tex
+    end)
+
+    if ok and createdOverlay then
+        overlayByFrame[frame] = createdOverlay
+        return createdOverlay
+    end
+
+    return nil
+end
+
+local function ApplyRangeIndicator(frame, unit)
+    local overlay = GetRangeOverlay(frame)
+    if not overlay then
+        return
+    end
+
+    pcall(function()
+        if UnitIsOutOfRange(unit) then
+            overlay:Show()
+        else
+            overlay:Hide()
+        end
+    end)
+end
 
 -- Disable range display and force alpha on all frames
 local function DisableRangeDisplay()
@@ -18,6 +82,7 @@ local function DisableRangeDisplay()
                             frame.optionTable.displayRangeDisplay = false
                         end
                         frame:SetAlpha(1)
+                        ApplyRangeIndicator(frame, unit)
                     end)
                 end
             end
@@ -36,6 +101,7 @@ local function DisableRangeDisplay()
                             frame.optionTable.displayRangeDisplay = false
                         end
                         frame:SetAlpha(1)
+                        ApplyRangeIndicator(frame, unit)
                     end)
                 end
             end
@@ -58,6 +124,7 @@ local function DisableRangeDisplay()
                                         frame.optionTable.displayRangeDisplay = false
                                     end
                                     frame:SetAlpha(1)
+                                    ApplyRangeIndicator(frame, unit)
                                 end)
                             end
                         end

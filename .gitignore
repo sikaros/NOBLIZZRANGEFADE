@@ -1,0 +1,28 @@
+# Secrets and local environment
+.env
+.env.*
+.codex/
+.agents/
+AGENTS.md
+CLAUDE.md
+
+# Local development notes and generated research
+CHANGELOG.md
+ACCESSIBILITY_AUDIT_*.md
+research-*.md
+QA_TEST_PLAN_*.md
+*_Dev_Tracker.jsx
+
+# Local backups and scratch files
+*_STABLE.lua
+*.bak
+*.tmp
+*.log
+
+# Release artifacts
+*.zip
+pkgmeta.txt
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

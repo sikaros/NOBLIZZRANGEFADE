@@ -17,10 +17,11 @@ Designed for healers, raid leaders, and anyone who wants clean, readable unit fr
 
 - Keeps **Party & Raid frames fully visible**
 - Prevents Blizzard’s **range-based transparency**
+- Adds a non-transparent range indicator when WoW exposes a safe range result
 - Safe to use **in combat**
 - Built exclusively for **Midnight and beyond**
 
-No taint. No errors. No blocked abilities.
+No hooks into protected range functions. No blocked abilities.
 
 ---
 
@@ -89,6 +90,12 @@ Intercepting Blizzard’s fade logic:
 - 🔵 over perfectly static frames
 
 Stability always wins.
+
+## ⚠️ Known Limitation: Restricted Range Values
+
+Midnight can return restricted range values in combat, dungeons, raids, and other protected contexts.
+
+When that happens, NoBlizzRangeFade keeps frames fully visible and hides the custom range overlay instead of trying to inspect protected values.
 
 ---
 

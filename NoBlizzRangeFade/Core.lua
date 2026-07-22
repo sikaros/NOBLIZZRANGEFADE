@@ -1,11 +1,11 @@
 -- NoBlizzRangeFade | Core.lua
 -- Addon initialization and namespace setup
--- VERSION: 1.0.0 STABLE
+-- VERSION: 1.1.0
 
 local addonName, ns = ...
 
 ns.ADDON_NAME  = addonName
-ns.VERSION     = "1.0.0"
+ns.VERSION     = "1.1.0"
 
 -- Simple logging (only when debug enabled)
 ns.debug = false

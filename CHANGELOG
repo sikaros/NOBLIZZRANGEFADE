@@ -2,6 +2,16 @@
 
 All notable changes to NoBlizzRangeFade will be documented in this file.
 
+## [1.1.0] - 2026-07-22
+
+### Added
+- Added a non-transparent out-of-range visual indicator for default party and raid frames.
+
+### Changed
+- Updated support metadata for World of Warcraft: Midnight 12.0.7.
+- Kept Blizzard range fading disabled while preserving full frame opacity.
+- Avoided unsafe use of restricted range values by hiding the indicator when range cannot be read.
+
 ## [1.0.0] - 2025-02-02
 ## [1.0.1] - 2026-04-21
 
