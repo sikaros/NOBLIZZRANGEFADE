@@ -3,8 +3,6 @@
 .env.*
 .codex/
 .agents/
-AGENTS.md
-CLAUDE.md
 
 # Local development notes and generated research
 CHANGELOG.md

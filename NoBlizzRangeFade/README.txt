@@ -2,7 +2,7 @@
 
 **Version:** 1.1.0
 
-Prevents raid and party frames from fading when units are out of range in World of Warcraft: Midnight, while adding a non-transparent range indicator.
+Prevents raid and party frames from fading when units are out of range in World of Warcraft: Midnight, while adding a dark range overlay.
 
 ---
 
