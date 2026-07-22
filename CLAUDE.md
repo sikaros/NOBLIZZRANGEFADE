@@ -25,18 +25,20 @@ Assume the environment is hostile by default.
 
 ---
 
-## Frame Name Reality (DO NOT ASSUME BLIZZARD DEFAULTS)
+## Frame Name Reality (CURRENT LIVE OVERRIDE)
 
-### Midnight DOES NOT use:
-- `CompactRaidFrame1-40`
+The live 12.0.7+ UI source supersedes the older diagnostic notes later in this file.
+
+### Midnight currently uses:
+- `CompactRaidFrame1-40` for compact raid unit frames
+- `CompactPartyFrameMember1-5` for compact party unit frames
+
+### Do not target:
+- `RaidGroupButton1-40`, which are raid-management controls and can interfere with Edit Mode
 - `UseCompactRaidFrame()`
 - `GetRaidMaxSize()`
 
-### Midnight DOES use:
-- `RaidGroupButton1` through `RaidGroupButton40`
-
-Any work involving raid frames must target `RaidGroupButtonX`.
-Never assume Blizzard documentation applies.
+Any work involving raid frames must target `CompactRaidFrameX` and verify names against the current live Blizzard UI source.
 
 ---
 
