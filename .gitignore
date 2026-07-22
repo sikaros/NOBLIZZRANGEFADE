@@ -24,3 +24,6 @@ pkgmeta.txt
 # OS/editor noise
 .DS_Store
 Thumbs.db
+
+# Local project instructions (untracked)
+CLAUDE.md
