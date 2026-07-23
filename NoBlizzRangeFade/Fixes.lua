@@ -1,30 +1,28 @@
 -- NoBlizzRangeFade | Fixes.lua  
--- VERSION: 1.1.0
+-- VERSION: 1.1.3
 -- Prevents raid and party frames from fading when units are out of range
 
 local addonName, ns = ...
 
 local overlayByFrame = setmetatable({}, { __mode = "k" })
+local compactRaidFrameCount = 0
+local worldReady = false
+local worldEntryGeneration = 0
+local readyAfterCombatGeneration
 
-local function UnitIsOutOfRange(unit)
-    if not unit then
-        return false
+local function DiscoverCompactRaidFrames()
+    while true do
+        local nextIndex = compactRaidFrameCount + 1
+        local ok, frame = pcall(function()
+            return _G["CompactRaidFrame" .. nextIndex]
+        end)
+
+        if not ok or not frame or type(frame) ~= "table" then
+            return
+        end
+
+        compactRaidFrameCount = nextIndex
     end
-
-    local ok, inRange, checkedRange = pcall(UnitInRange, unit)
-    if not ok then
-        return false
-    end
-
-    if issecretvalue and (issecretvalue(inRange) or issecretvalue(checkedRange)) then
-        return false
-    end
-
-    local compareOk, isOutOfRange = pcall(function()
-        return checkedRange == true and inRange == false
-    end)
-
-    return compareOk and isOutOfRange
 end
 
 local function GetRangeOverlay(frame)
@@ -38,11 +36,22 @@ local function GetRangeOverlay(frame)
     end
 
     local ok, createdOverlay = pcall(function()
-        local tex = frame:CreateTexture(nil, "OVERLAY", nil, 7)
-        tex:SetAllPoints(frame)
-        tex:SetColorTexture(0.12, 0.12, 0.12, 0.45)
-        tex:Hide()
-        return tex
+        local rangeGate = CreateFrame("Frame", nil, frame)
+        rangeGate:SetAllPoints(frame)
+        rangeGate:SetAlpha(0)
+
+        local texture = rangeGate:CreateTexture(nil, "OVERLAY", nil, 7)
+        texture:SetAllPoints(rangeGate)
+        texture:SetColorTexture(0.35, 0.35, 0.35, 1)
+        texture:SetAlpha(0)
+
+        rangeGate:Show()
+        texture:Show()
+
+        return {
+            rangeGate = rangeGate,
+            texture = texture,
+        }
     end)
 
     if ok and createdOverlay then
@@ -59,17 +68,34 @@ local function ApplyRangeIndicator(frame, unit)
         return
     end
 
-    pcall(function()
-        if UnitIsOutOfRange(unit) then
-            overlay:Show()
-        else
-            overlay:Hide()
-        end
+    local ok, inRange, checkedRange = pcall(UnitInRange, unit)
+    if not ok then
+        pcall(function()
+            overlay.rangeGate:SetAlpha(0)
+        end)
+        return
+    end
+
+    local applied = pcall(function()
+        overlay.rangeGate:SetAlphaFromBoolean(checkedRange, 1, 0)
+        overlay.texture:SetAlphaFromBoolean(inRange, 0, 0.50)
     end)
+
+    if not applied then
+        pcall(function()
+            overlay.rangeGate:SetAlpha(0)
+        end)
+    end
 end
 
 -- Disable range display and force alpha on all frames
 local function DisableRangeDisplay()
+    -- Blizzard restores Edit Mode layouts while PLAYER_ENTERING_WORLD is
+    -- running. Do not touch compact frames until that work has settled.
+    if not worldReady then
+        return
+    end
+
     -- Party frames
     for i = 1, 5 do
         pcall(function()
@@ -80,6 +106,7 @@ local function DisableRangeDisplay()
                     pcall(function()
                         if frame.optionTable then
                             frame.optionTable.displayRangeDisplay = false
+                            frame.optionTable.fadeOutOfRange = false
                         end
                         frame:SetAlpha(1)
                         ApplyRangeIndicator(frame, unit)
@@ -89,16 +116,18 @@ local function DisableRangeDisplay()
         end)
     end
     
-    -- Raid frames (RaidGroupButton pattern)
-    for i = 1, 40 do
+    -- Raid frames use a contiguous creation counter, not a member index.
+    DiscoverCompactRaidFrames()
+    for i = 1, compactRaidFrameCount do
         pcall(function()
-            local frame = _G["RaidGroupButton" .. i]
+            local frame = _G["CompactRaidFrame" .. i]
             if frame and type(frame) == "table" then
                 local ok, unit = pcall(function() return frame.unit end)
                 if ok and unit then
                     pcall(function()
                         if frame.optionTable then
                             frame.optionTable.displayRangeDisplay = false
+                            frame.optionTable.fadeOutOfRange = false
                         end
                         frame:SetAlpha(1)
                         ApplyRangeIndicator(frame, unit)
@@ -122,6 +151,7 @@ local function DisableRangeDisplay()
                                 pcall(function()
                                     if frame.optionTable then
                                         frame.optionTable.displayRangeDisplay = false
+                                        frame.optionTable.fadeOutOfRange = false
                                     end
                                     frame:SetAlpha(1)
                                     ApplyRangeIndicator(frame, unit)
@@ -150,7 +180,40 @@ end)
 -- Re-apply on roster changes
 local rosterFrame = CreateFrame("Frame")
 rosterFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-rosterFrame:SetScript("OnEvent", function()
+rosterFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+rosterFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+rosterFrame:SetScript("OnEvent", function(self, event)
+    if event == "PLAYER_ENTERING_WORLD" then
+        worldEntryGeneration = worldEntryGeneration + 1
+        local generation = worldEntryGeneration
+        worldReady = false
+        readyAfterCombatGeneration = nil
+
+        C_Timer.After(1, function()
+            if generation ~= worldEntryGeneration then
+                return
+            end
+
+            if InCombatLockdown and InCombatLockdown() then
+                readyAfterCombatGeneration = generation
+                return
+            end
+
+            worldReady = true
+            DisableRangeDisplay()
+        end)
+        return
+    end
+
+    if event == "PLAYER_REGEN_ENABLED" then
+        if readyAfterCombatGeneration == worldEntryGeneration then
+            readyAfterCombatGeneration = nil
+            worldReady = true
+            DisableRangeDisplay()
+        end
+        return
+    end
+
     C_Timer.After(0.5, function()
         DisableRangeDisplay()
     end)
