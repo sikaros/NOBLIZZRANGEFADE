@@ -93,8 +93,8 @@ local function IsEditModeOpen()
 end
 
 -- Refresh one frame's alpha and range overlay.
--- Frame alpha is 1.0 in range. Out of range it uses the user alpha setting
--- (default 1.0 = never fade); players who want fading can lower it.
+-- The real Blizzard frame must always stay at 1.0 alpha.
+-- The user alpha setting only controls our grey overlay.
 -- We branch with SetAlphaFromBoolean, so we never compare secret range values.
 -- Do not write frame.optionTable here. Blizzard reads that table during
 -- compact-frame refresh, and addon writes can taint protected health math.
@@ -111,16 +111,16 @@ local function ApplyFrame(frame, unit)
         return
     end
 
-    local outAlpha = 1.0
+    local overlayAlpha = OUT_OF_RANGE_OVERLAY_ALPHA
     if type(ns.settings) == "table" and type(ns.settings.alpha) == "number" then
-        outAlpha = ns.settings.alpha
+        overlayAlpha = ns.settings.alpha
     end
 
     local applied = pcall(function()
-        frame:SetAlphaFromBoolean(inRange, 1, outAlpha)
+        frame:SetAlpha(1)
         if overlay then
             overlay.rangeGate:SetAlphaFromBoolean(checkedRange, 1, 0)
-            overlay.texture:SetAlphaFromBoolean(inRange, 0, OUT_OF_RANGE_OVERLAY_ALPHA)
+            overlay.texture:SetAlphaFromBoolean(inRange, 0, overlayAlpha)
         end
     end)
 
@@ -275,7 +275,7 @@ end)
 -- Public API
 ns.FixAllFrames = DisableRangeDisplay
 
--- Clear overlays so a settings change (for example a new alpha) redraws cleanly
+-- Clear overlays so a settings change redraws cleanly
 -- on the next update pass. Called by the alpha slash command.
 ns.ResetRangeState = HideRangeIndicators
 
