@@ -17,7 +17,7 @@ Designed for healers, raid leaders, and anyone who wants clean, readable unit fr
 
 - Keeps **Party & Raid frames fully visible**
 - Prevents Blizzard’s **range-based transparency**
-- Adds a non-transparent range indicator when WoW exposes a safe range result
+- Adds a dark range overlay when WoW exposes a safe range result
 - Safe to use **in combat**
 - Built exclusively for **Midnight and beyond**
 
@@ -40,7 +40,7 @@ That frustration inspired this addon.
 
 ---
 
-## 🛡️ How It Works — “The Defender” Logic
+## 🛡️ How It Works - “The Defender” Logic
 
 Instead of fighting Blizzard’s protected systems, NoBlizzRangeFade takes a defensive approach.
 
@@ -105,13 +105,13 @@ Hi! I’m **Sikaros**, a **new addon author**.
 
 - This is a learning project
 - I’m still figuring things out
-- Please be patient — and kind ❤️
+- Please be patient - and kind ❤️
 
 Feedback, bug reports, and suggestions are welcome, just keep in mind that this addon prioritizes stability above all else.
 
 
 ## 🙏 Credits & Inspiration
 
-- **anniefuchsia** — for highlighting the issue and inspiring a solution CLIP: https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
-- **Claude** — powered-by-vibes coding assistance
-- Blizzard — for making this necessary 😄
+- **anniefuchsia** - for highlighting the issue and inspiring a solution CLIP: https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
+- **Claude** - powered-by-vibes coding assistance
+- Blizzard - for making this necessary 😄
