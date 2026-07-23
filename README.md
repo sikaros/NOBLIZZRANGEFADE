@@ -22,7 +22,8 @@ The addon does not support ElvUI, VuhDo, or other custom frame replacements.
 
 ## How it works
 
-Every 0.1 seconds, the addon checks the default group frames, disables Blizzard's range fade, and resets their opacity.
+Every 0.1 seconds, the addon checks the default group frames and resets their opacity.
+It does not write Blizzard compact-frame option tables, because those writes can taint protected frame refresh code.
 
 For the grey overlay, it passes `UnitInRange` results straight to Blizzard's `SetAlphaFromBoolean` API. Blizzard handles restricted values, so the addon never compares them in Lua.
 
