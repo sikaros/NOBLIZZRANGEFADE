@@ -1,11 +1,11 @@
 -- NoBlizzRangeFade | Core.lua
 -- Addon initialization and namespace setup
--- VERSION: 1.1.2
+-- VERSION: 1.1.3
 
 local addonName, ns = ...
 
 ns.ADDON_NAME  = addonName
-ns.VERSION     = "1.1.2"
+ns.VERSION     = "1.1.3"
 
 -- Settings with defaults
 ns.settings = {
@@ -108,7 +108,6 @@ end
 local Init = CreateFrame("Frame")
 
 Init:RegisterEvent("ADDON_LOADED")
-Init:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 Init:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
@@ -122,10 +121,5 @@ Init:SetScript("OnEvent", function(self, event, ...)
         end
 
         self:UnregisterEvent("ADDON_LOADED")
-
-    elseif event == "PLAYER_ENTERING_WORLD" then
-        if ns.FixAllFrames then
-            ns.FixAllFrames()
-        end
     end
 end)

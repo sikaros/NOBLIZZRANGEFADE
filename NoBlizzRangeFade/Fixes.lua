@@ -1,11 +1,14 @@
 -- NoBlizzRangeFade | Fixes.lua  
--- VERSION: 1.1.2
+-- VERSION: 1.1.3
 -- Prevents raid and party frames from fading when units are out of range
 
 local addonName, ns = ...
 
 local overlayByFrame = setmetatable({}, { __mode = "k" })
 local compactRaidFrameCount = 0
+local worldReady = false
+local worldEntryGeneration = 0
+local readyAfterCombatGeneration
 
 local function DiscoverCompactRaidFrames()
     while true do
@@ -75,7 +78,7 @@ local function ApplyRangeIndicator(frame, unit)
 
     local applied = pcall(function()
         overlay.rangeGate:SetAlphaFromBoolean(checkedRange, 1, 0)
-        overlay.texture:SetAlphaFromBoolean(inRange, 0, 0.40)
+        overlay.texture:SetAlphaFromBoolean(inRange, 0, 0.50)
     end)
 
     if not applied then
@@ -87,6 +90,12 @@ end
 
 -- Disable range display and force alpha on all frames
 local function DisableRangeDisplay()
+    -- Blizzard restores Edit Mode layouts while PLAYER_ENTERING_WORLD is
+    -- running. Do not touch compact frames until that work has settled.
+    if not worldReady then
+        return
+    end
+
     -- Party frames
     for i = 1, 5 do
         pcall(function()
@@ -171,7 +180,40 @@ end)
 -- Re-apply on roster changes
 local rosterFrame = CreateFrame("Frame")
 rosterFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-rosterFrame:SetScript("OnEvent", function()
+rosterFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+rosterFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+rosterFrame:SetScript("OnEvent", function(self, event)
+    if event == "PLAYER_ENTERING_WORLD" then
+        worldEntryGeneration = worldEntryGeneration + 1
+        local generation = worldEntryGeneration
+        worldReady = false
+        readyAfterCombatGeneration = nil
+
+        C_Timer.After(1, function()
+            if generation ~= worldEntryGeneration then
+                return
+            end
+
+            if InCombatLockdown and InCombatLockdown() then
+                readyAfterCombatGeneration = generation
+                return
+            end
+
+            worldReady = true
+            DisableRangeDisplay()
+        end)
+        return
+    end
+
+    if event == "PLAYER_REGEN_ENABLED" then
+        if readyAfterCombatGeneration == worldEntryGeneration then
+            readyAfterCombatGeneration = nil
+            worldReady = true
+            DisableRangeDisplay()
+        end
+        return
+    end
+
     C_Timer.After(0.5, function()
         DisableRangeDisplay()
     end)
