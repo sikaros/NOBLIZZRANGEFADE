@@ -1,15 +1,13 @@
 # NoBlizzRangeFade
 
-NoBlizzRangeFade keeps Blizzard party and raid frames at full opacity when group members move out of range.
-
-The addon also shows a grey range overlay. It passes range values to Blizzard's secret-safe display API without inspecting them in Lua.
+Blizzard dims default party and raid frames when group members move out of range. NoBlizzRangeFade keeps those frames at full opacity and uses a grey overlay to show range instead.
 
 ## Requirements
 
 - World of Warcraft: Midnight 12.0.7 or later
 - Default Blizzard party or raid frames
 
-ElvUI, VuhDo, and other custom frame replacements are not supported.
+The addon does not support ElvUI, VuhDo, or other custom frame replacements.
 
 ## Commands
 
@@ -18,8 +16,7 @@ ElvUI, VuhDo, and other custom frame replacements are not supported.
 
 ## Limits
 
-- A brief flicker can occur before the addon restores frame opacity.
-- Frames created during combat receive an overlay after combat ends.
-- Only default Blizzard group frames are supported.
+- You may see a brief flicker before the addon restores a frame.
+- A frame created during combat gets its range overlay after combat ends.
 
 Report problems on the project page.
