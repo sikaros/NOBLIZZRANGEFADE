@@ -22,10 +22,10 @@ The addon does not support ElvUI, VuhDo, or other custom frame replacements.
 
 ## How it works
 
-Every 0.1 seconds, the addon checks the default group frames and resets their opacity.
+Every 0.1 seconds, the addon checks the default group frames and resets their opacity to 1.0.
 It does not write Blizzard compact-frame option tables, because those writes can taint protected frame refresh code.
 
-For the grey overlay, it passes `UnitInRange` results straight to Blizzard's `SetAlphaFromBoolean` API. Blizzard handles restricted values, so the addon never compares them in Lua.
+For the grey overlay, it passes `UnitInRange` results straight to Blizzard's `SetAlphaFromBoolean` API. Blizzard handles restricted values, so the addon never compares them in Lua. The `/norangefade alpha` setting controls only this overlay. The default overlay alpha is 0.40.
 
 The addon does not hook protected range functions.
 
