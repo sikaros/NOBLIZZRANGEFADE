@@ -1,119 +1,45 @@
-# 🌙 NoBlizzRangeFade (Midnight)
+# NoBlizzRangeFade
 
-**Author:** *Sikaros*  
-**Powered by:** Claude (vibe coding ✨)
+NoBlizzRangeFade keeps Blizzard party and raid frames at full opacity when group members move out of range.
 
-NoBlizzRangeFade is a lightweight World of Warcraft addon built **specifically for the Midnight client**.
+Out-of-range frames also receive a grey range overlay.
 
-Its mission is simple:
+## Requirements
 
-👉 **Stop Party & Raid frames from fading when players are out of range.**
+- World of Warcraft: Midnight 12.0.7 or later
+- Default Blizzard party or raid frames
 
-Designed for healers, raid leaders, and anyone who wants clean, readable unit frames at all times.
+Custom frame addons such as ElvUI and VuhDo are not supported.
 
----
+## Install
 
-## ✨ What This Addon Does
+1. Download the latest release.
+2. Extract the `NoBlizzRangeFade` folder into `_retail_/Interface/AddOns/`.
+3. Restart World of Warcraft or reload the interface.
 
-- Keeps **Party & Raid frames fully visible**
-- Prevents Blizzard’s **range-based transparency**
-- Adds a subtle grey range overlay using Midnight's secret-safe display API
-- Safe to use **in combat**
-- Built exclusively for **Midnight and beyond**
+## Commands
 
-No hooks into protected range functions. No blocked abilities.
+- `/norangefade status` shows the addon version and debug state.
+- `/norangefade debug` turns debug messages on or off.
 
----
+## How it works
 
-## 💡 Why This Exists
+The addon checks the default group frames ten times per second. Each check disables Blizzard's range fade and restores full frame opacity.
 
-During the **Midnight pre-patch (v12.0)**, Blizzard introduced a transparency effect on Party and Raid frames when units move out of range.
+The overlay passes range values to Blizzard's secret-safe display API. The addon does not inspect those values in Lua.
 
-This change:
-- Is handled in protected **C-side code**
-- Breaks traditional addon methods
-- Can cause **Secret Value errors**, taint, and combat issues
+The addon does not hook Blizzard's protected range functions.
 
-This issue was publicly highlighted by **streamer anniefuchsia**, who couldn’t find a safe way to fully disable the new transparency behavior.
+## Limits
 
-That frustration inspired this addon.
+- A brief flicker can occur before the addon restores frame opacity.
+- Frames created during combat receive an overlay after combat ends.
+- Only default Blizzard group frames are supported.
 
----
+## Credits
 
-## 🛡️ How It Works - “The Defender” Logic
+The addon was inspired by an issue [highlighted by anniefuchsia](https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB).
 
-Instead of fighting Blizzard’s protected systems, NoBlizzRangeFade takes a defensive approach.
+## License
 
-### 🔁 Reactive Restoration
-
-- Every **0.05–0.1 seconds**, the addon:
-  - Scans visible Party & Raid frames
-  - Forces them back to full opacity using `SetAlpha(1)`
-
-### 🧠 Stability First
-
-- No hooks into protected Blizzard functions
-- No overrides of `UpdateInRange`
-- Zero Lua errors
-- Fully combat-safe
-
-### 🎯 Midnight-Aware
-
-Specifically targets:
-- `CompactRaidFrame`
-- `CompactPartyFrameMember`
-
-These structures are unique to the modern Midnight client.
-
----
-
-## ⚠️ Known Limitation: The Tiny Flicker™
-
-You may notice a **very brief flicker** when a unit moves in or out of range.
-
-### Why it happens
-
-- Blizzard fades the frame instantly
-- Lua restores visibility milliseconds later
-- A tiny visual gap occurs between the two
-
-### Why it’s not “fixed”
-
-Intercepting Blizzard’s fade logic:
-- Turns frame data into **Secret Values**
-- Causes severe UI errors
-- Can block abilities in combat
-
-### The Tradeoff
-
-- 🟢 Stable, safe UI  
-- 🔵 over perfectly static frames
-
-Stability always wins.
-
-## 🎯 Secret-Safe Range Indicator
-
-Midnight returns restricted range values in combat, dungeons, raids, and other protected contexts.
-
-NoBlizzRangeFade passes those values directly to Blizzard's secret-safe display API. The addon never inspects or compares them in Lua.
-
-If Blizzard creates a new party or raid frame during combat, NoBlizzRangeFade waits until combat ends before attaching the custom overlay. Full-opacity enforcement continues during that time.
-
----
-
-## 🧪 A Small Personal Note
-
-Hi! I’m **Sikaros**, a **new addon author**.
-
-- This is a learning project
-- I’m still figuring things out
-- Please be patient - and kind ❤️
-
-Feedback, bug reports, and suggestions are welcome, just keep in mind that this addon prioritizes stability above all else.
-
-
-## 🙏 Credits & Inspiration
-
-- **anniefuchsia** - for highlighting the issue and inspiring a solution CLIP: https://www.twitch.tv/anniefuchsia/clip/WanderingGoldenDolphinRlyTho-DXq_fRXwz6PllHzB
-- **Claude** - powered-by-vibes coding assistance
-- Blizzard - for making this necessary 😄
+See [LICENSE](LICENSE).
