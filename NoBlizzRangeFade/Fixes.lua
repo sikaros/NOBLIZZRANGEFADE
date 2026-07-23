@@ -64,31 +64,8 @@ local function GetRangeOverlay(frame)
     return nil
 end
 
-local function ApplyRangeIndicator(frame, unit)
-    local overlay = GetRangeOverlay(frame)
-    if not overlay then
-        return
-    end
-
-    local ok, inRange, checkedRange = pcall(UnitInRange, unit)
-    if not ok then
-        pcall(function()
-            overlay.rangeGate:SetAlpha(0)
-        end)
-        return
-    end
-
-    local applied = pcall(function()
-        overlay.rangeGate:SetAlphaFromBoolean(checkedRange, 1, 0)
-        overlay.texture:SetAlphaFromBoolean(inRange, 0, 0.50)
-    end)
-
-    if not applied then
-        pcall(function()
-            overlay.rangeGate:SetAlpha(0)
-        end)
-    end
-end
+-- Grey overlay strength applied to a frame when its unit is out of range.
+local OUT_OF_RANGE_OVERLAY_ALPHA = 0.40
 
 local function HideRangeIndicators()
     for frame, overlay in pairs(overlayByFrame) do
@@ -98,11 +75,76 @@ local function HideRangeIndicators()
     end
 end
 
--- Disable range display and force alpha on all frames
+-- Edit Mode uses simulated preview units. We must leave those alone.
+-- The EditMode.Enter/Exit callbacks below set editModeActive, but we do not
+-- trust those event names to fire, so we also poll the manager frame directly.
+local function IsEditModeOpen()
+    if editModeActive then
+        return true
+    end
+    local f = EditModeManagerFrame
+    if type(f) == "table" then
+        local ok, shown = pcall(function() return f:IsShown() end)
+        if ok and shown then
+            return true
+        end
+    end
+    return false
+end
+
+-- Refresh one frame's alpha and range overlay.
+-- Frame alpha is 1.0 in range. Out of range it uses the user alpha setting
+-- (default 1.0 = never fade); players who want fading can lower it.
+-- We branch with SetAlphaFromBoolean, so we never compare secret range values.
+-- Do not write frame.optionTable here. Blizzard reads that table during
+-- compact-frame refresh, and addon writes can taint protected health math.
+local function ApplyFrame(frame, unit)
+    local overlay = GetRangeOverlay(frame)
+
+    local ok, inRange, checkedRange = pcall(UnitInRange, unit)
+    if not ok then
+        -- Range restricted. Keep the frame fully visible and hide the overlay.
+        pcall(function() frame:SetAlpha(1) end)
+        if overlay then
+            pcall(function() overlay.rangeGate:SetAlpha(0) end)
+        end
+        return
+    end
+
+    local outAlpha = 1.0
+    if type(ns.settings) == "table" and type(ns.settings.alpha) == "number" then
+        outAlpha = ns.settings.alpha
+    end
+
+    local applied = pcall(function()
+        frame:SetAlphaFromBoolean(inRange, 1, outAlpha)
+        if overlay then
+            overlay.rangeGate:SetAlphaFromBoolean(checkedRange, 1, 0)
+            overlay.texture:SetAlphaFromBoolean(inRange, 0, OUT_OF_RANGE_OVERLAY_ALPHA)
+        end
+    end)
+
+    if not applied then
+        -- Safe fallback: stay visible, hide the overlay.
+        pcall(function() frame:SetAlpha(1) end)
+        if overlay then
+            pcall(function() overlay.rangeGate:SetAlpha(0) end)
+        end
+    end
+end
+
+-- Keep default group frames visible and update our range overlay.
 local function DisableRangeDisplay()
     -- Blizzard restores Edit Mode layouts while PLAYER_ENTERING_WORLD is
     -- running. Do not touch compact frames until that work has settled.
-    if not worldReady or editModeActive then
+    if not worldReady then
+        return
+    end
+
+    -- Never touch frames while Edit Mode is open. Clear our overlays so the
+    -- simulated previews stay under Blizzard's control.
+    if IsEditModeOpen() then
+        HideRangeIndicators()
         return
     end
 
@@ -113,19 +155,12 @@ local function DisableRangeDisplay()
             if frame and type(frame) == "table" then
                 local ok, unit = pcall(function() return frame.unit end)
                 if ok and unit then
-                    pcall(function()
-                        if frame.optionTable then
-                            frame.optionTable.displayRangeDisplay = false
-                            frame.optionTable.fadeOutOfRange = false
-                        end
-                        frame:SetAlpha(1)
-                        ApplyRangeIndicator(frame, unit)
-                    end)
+                    pcall(function() ApplyFrame(frame, unit) end)
                 end
             end
         end)
     end
-    
+
     -- Raid frames use a contiguous creation counter, not a member index.
     DiscoverCompactRaidFrames()
     for i = 1, compactRaidFrameCount do
@@ -134,19 +169,12 @@ local function DisableRangeDisplay()
             if frame and type(frame) == "table" then
                 local ok, unit = pcall(function() return frame.unit end)
                 if ok and unit then
-                    pcall(function()
-                        if frame.optionTable then
-                            frame.optionTable.displayRangeDisplay = false
-                            frame.optionTable.fadeOutOfRange = false
-                        end
-                        frame:SetAlpha(1)
-                        ApplyRangeIndicator(frame, unit)
-                    end)
+                    pcall(function() ApplyFrame(frame, unit) end)
                 end
             end
         end)
     end
-    
+
     -- Raid frames (CompactRaidGroup pattern)
     for group = 1, 8 do
         pcall(function()
@@ -158,14 +186,7 @@ local function DisableRangeDisplay()
                         if frame and type(frame) == "table" then
                             local ok, unit = pcall(function() return frame.unit end)
                             if ok and unit then
-                                pcall(function()
-                                    if frame.optionTable then
-                                        frame.optionTable.displayRangeDisplay = false
-                                        frame.optionTable.fadeOutOfRange = false
-                                    end
-                                    frame:SetAlpha(1)
-                                    ApplyRangeIndicator(frame, unit)
-                                end)
+                                pcall(function() ApplyFrame(frame, unit) end)
                             end
                         end
                     end)
@@ -253,6 +274,10 @@ end)
 
 -- Public API
 ns.FixAllFrames = DisableRangeDisplay
+
+-- Clear overlays so a settings change (for example a new alpha) redraws cleanly
+-- on the next update pass. Called by the alpha slash command.
+ns.ResetRangeState = HideRangeIndicators
 
 ns.SetupHooks = function()
     DisableRangeDisplay()
