@@ -4,11 +4,16 @@
 .codex/
 .agents/
 
-# Local development notes and generated research
+# Local development and QA notes, generated research
 CHANGELOG.md
 ACCESSIBILITY_AUDIT_*.md
 research-*.md
 QA_TEST_PLAN_*.md
+QA_*.md
+*_QA.md
+DEVELOPMENT_LESSONS.md
+DEVELOPMENT_*.md
+DEV_NOTES*.md
 *_Dev_Tracker.jsx
 
 # Local backups and scratch files

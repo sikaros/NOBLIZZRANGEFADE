@@ -18,6 +18,7 @@ The addon does not support ElvUI, VuhDo, or other custom frame replacements.
 ## Commands
 
 - `/norangefade status` shows the addon version and debug state.
+- `/norangefade alpha <0.3-1.0>` sets the grey overlay alpha.
 - `/norangefade debug` turns debug messages on or off.
 
 ## How it works
