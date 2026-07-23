@@ -2,6 +2,13 @@
 
 All notable changes to NoBlizzRangeFade will be documented in this file.
 
+## [1.1.4] - 2026-07-22
+
+### Fixed
+- Suspended range-frame changes while HUD Edit Mode is open.
+- Hid addon-owned range overlays from Blizzard's simulated party and raid previews.
+- Resumed range handling after Edit Mode finishes applying the saved layout.
+
 ## [1.1.3] - 2026-07-22
 
 ### Fixed

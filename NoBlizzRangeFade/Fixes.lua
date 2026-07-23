@@ -1,5 +1,5 @@
 -- NoBlizzRangeFade | Fixes.lua  
--- VERSION: 1.1.3
+-- VERSION: 1.1.4
 -- Prevents raid and party frames from fading when units are out of range
 
 local addonName, ns = ...
@@ -9,6 +9,8 @@ local compactRaidFrameCount = 0
 local worldReady = false
 local worldEntryGeneration = 0
 local readyAfterCombatGeneration
+local editModeActive = false
+local editModeGeneration = 0
 
 local function DiscoverCompactRaidFrames()
     while true do
@@ -88,11 +90,19 @@ local function ApplyRangeIndicator(frame, unit)
     end
 end
 
+local function HideRangeIndicators()
+    for frame, overlay in pairs(overlayByFrame) do
+        pcall(function()
+            overlay.rangeGate:SetAlpha(0)
+        end)
+    end
+end
+
 -- Disable range display and force alpha on all frames
 local function DisableRangeDisplay()
     -- Blizzard restores Edit Mode layouts while PLAYER_ENTERING_WORLD is
     -- running. Do not touch compact frames until that work has settled.
-    if not worldReady then
+    if not worldReady or editModeActive then
         return
     end
 
@@ -163,6 +173,28 @@ local function DisableRangeDisplay()
             end
         end)
     end
+end
+
+-- Edit Mode uses simulated party and raid units. Leave those previews entirely
+-- under Blizzard's control, then resume after the saved layout has settled.
+if EventRegistry and type(EventRegistry) == "table" then
+    EventRegistry:RegisterCallback("EditMode.Enter", function()
+        editModeGeneration = editModeGeneration + 1
+        editModeActive = true
+        HideRangeIndicators()
+    end)
+
+    EventRegistry:RegisterCallback("EditMode.Exit", function()
+        local generation = editModeGeneration
+        C_Timer.After(0.5, function()
+            if generation ~= editModeGeneration then
+                return
+            end
+
+            editModeActive = false
+            DisableRangeDisplay()
+        end)
+    end)
 end
 
 -- Continuous update loop (10 times per second)

@@ -1,11 +1,11 @@
 -- NoBlizzRangeFade | Core.lua
 -- Addon initialization and namespace setup
--- VERSION: 1.1.3
+-- VERSION: 1.1.4
 
 local addonName, ns = ...
 
 ns.ADDON_NAME  = addonName
-ns.VERSION     = "1.1.3"
+ns.VERSION     = "1.1.4"
 
 -- Settings with defaults
 ns.settings = {
