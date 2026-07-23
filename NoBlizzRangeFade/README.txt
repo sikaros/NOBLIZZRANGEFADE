@@ -1,8 +1,8 @@
 # NoBlizzRangeFade
 
-**Version:** 1.1.0
+**Version:** 1.1.2
 
-Prevents raid and party frames from fading when units are out of range in World of Warcraft: Midnight, while adding a dark range overlay.
+Prevents raid and party frames from fading when units are out of range in World of Warcraft: Midnight, while adding a subtle grey range overlay.
 
 ---
 
@@ -36,7 +36,8 @@ Type these commands in-game:
 ## 📝 Known Issues
 
 - Minor visual flicker may occur when units move in/out of range (unavoidable without causing lua errors)
-- The range overlay is hidden when WoW returns restricted range values; full opacity protection remains active
+- The range overlay uses Midnight's secret-safe display API so it can update without inspecting restricted range values
+- A unit frame first created during combat receives its range overlay after combat ends
 - Only affects default Blizzard frames
 
 ---

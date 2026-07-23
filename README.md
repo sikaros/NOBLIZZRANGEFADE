@@ -17,7 +17,7 @@ Designed for healers, raid leaders, and anyone who wants clean, readable unit fr
 
 - Keeps **Party & Raid frames fully visible**
 - Prevents Blizzard’s **range-based transparency**
-- Adds a dark range overlay when WoW exposes a safe range result
+- Adds a subtle grey range overlay using Midnight's secret-safe display API
 - Safe to use **in combat**
 - Built exclusively for **Midnight and beyond**
 
@@ -60,7 +60,7 @@ Instead of fighting Blizzard’s protected systems, NoBlizzRangeFade takes a def
 ### 🎯 Midnight-Aware
 
 Specifically targets:
-- `RaidGroupButton`
+- `CompactRaidFrame`
 - `CompactPartyFrameMember`
 
 These structures are unique to the modern Midnight client.
@@ -91,11 +91,13 @@ Intercepting Blizzard’s fade logic:
 
 Stability always wins.
 
-## ⚠️ Known Limitation: Restricted Range Values
+## 🎯 Secret-Safe Range Indicator
 
-Midnight can return restricted range values in combat, dungeons, raids, and other protected contexts.
+Midnight returns restricted range values in combat, dungeons, raids, and other protected contexts.
 
-When that happens, NoBlizzRangeFade keeps frames fully visible and hides the custom range overlay instead of trying to inspect protected values.
+NoBlizzRangeFade passes those values directly to Blizzard's secret-safe display API. The addon never inspects or compares them in Lua.
+
+If Blizzard creates a new party or raid frame during combat, NoBlizzRangeFade waits until combat ends before attaching the custom overlay. Full-opacity enforcement continues during that time.
 
 ---
 

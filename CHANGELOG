@@ -2,6 +2,20 @@
 
 All notable changes to NoBlizzRangeFade will be documented in this file.
 
+## [1.1.2] - 2026-07-22
+
+### Fixed
+- Stopped modifying `RaidGroupButton` raid-management controls.
+- Updated raid unit-frame targeting to dynamically discover current `CompactRaidFrameN` globals.
+- Prevented the addon from interfering with raid Edit Mode appearance and layout controls.
+
+## [1.1.1] - 2026-07-22
+
+### Fixed
+- Replaced restricted range-value comparisons with Midnight's secret-safe boolean display API.
+- Added the current `fadeOutOfRange` field while retaining the older range-display safeguard.
+- Kept frames fully opaque while applying a subtle grey overlay to out-of-range units.
+
 ## [1.1.0] - 2026-07-22
 
 ### Added
